@@ -11,6 +11,17 @@
 		
 		<action path="/test" forward="/test/write.jsp"/>
 		
+		<!-- testForm에 있는 값을 가져가야한다 //request할때마다 객체생성해야하니까 scope=request -->
+		<!-- return mapping.findForward("ok"); 리턴값이 아래로 다시 돌아온다 ok와 함께 -->
+		
+		<action path="/test_ok" type="com.test.TestAction" name="TestForm" scope="request">
+		
+		<!-- "vo"는 write_ok로 넘어가는것  -->
+			<forward name="ok" path="/test/write_ok.jsp"/>
+			<forward name="error" path="/test/error.jsp"/>
+			
+		</action>
+		
     </action-mappings>
 </struts-config>
 

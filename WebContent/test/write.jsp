@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<form action="<%=cp%>/test_ok.do">
+<form action="<%=cp%>/test_ok.do" method="post">
 
 아이디 : <input type="text" name="userId"/><br/>
 패스워드 : <input type="password" name="userPwd"/><br/>

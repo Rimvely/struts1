@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+    <form-beans>
+		<form-bean name="boardForm" type="com.board.BoardForm"/>
+	</form-beans>
+
+    <action-mappings>
+    	
+    	<!-- 자주쓰는 /board.do?method=list는 별칭화를 시킬수 있다   -->
+    	<action path="/boardList" forward="/board.do?method=list"/>
+    
+    	
+    	<!-- 이제는 method 단위로 만들기때문에 parameter가 따라다닌다
+    		 parameter에는 method의 이름을 담을것이다
+    		 우리가 아까 만든 method의 이름은 write 이기때문에 주소가
+    		 http://192.168.16.27:8080/strusts1/board.do?method=write 된다
+    		 그리고 ?다음의 method는 parameter에서 적은것이 되는거 같다 -->
+	 	<action path="/board" type="com.board.BoardAction" name="boardForm" scope="request" parameter="method">
+	 		
+	 			<!-- return mapping.findForward("created"); created이기때문에 밑에는 이걸받으면!이라고 정하는것
+	 			     그래서 created를 받아오게되면 path, 즉 그쪽 경로로 가라고 명령함  -->
+	 			<forward name="created" path="/board/created.jsp"/>
+	 			
+	 			<!-- save가 돌아오면 insert를 한것이기때문에 rediret 한다  
+	 				 여기는 method가 list -->
+	 			<forward name="save" redirect="true" path="/board.do?method=list"/>
+	 			
+	 			<!-- 여기는 반환값이 list  -->
+	 			<forward name="list" path="/board/list.jsp"/>
+	 	
+	 	</action>
+
+    </action-mappings>
+</struts-config>
+
