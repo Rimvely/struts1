@@ -10,6 +10,7 @@
     <action-mappings>
     	
     	<!-- 자주쓰는 /board.do?method=list는 별칭화를 시킬수 있다   -->
+    	<!-- 즉 메인페이지를 불러오기위해 다른걸 만듬  -->
     	<action path="/boardList" forward="/board.do?method=list"/>
     
     	
@@ -22,14 +23,21 @@
 	 		
 	 			<!-- return mapping.findForward("created"); created이기때문에 밑에는 이걸받으면!이라고 정하는것
 	 			     그래서 created를 받아오게되면 path, 즉 그쪽 경로로 가라고 명령함  -->
-	 			<forward name="created" path="/board/created.jsp"/>
+			<forward name="created" path="/board/created.jsp"/>
 	 			
 	 			<!-- save가 돌아오면 insert를 한것이기때문에 rediret 한다  
 	 				 여기는 method가 list -->
-	 			<forward name="save" redirect="true" path="/board.do?method=list"/>
+			<forward name="save" redirect="true" path="/board.do?method=list"/>
 	 			
 	 			<!-- 여기는 반환값이 list  -->
-	 			<forward name="list" path="/board/list.jsp"/>
+ 			<forward name="list" path="/board/list.jsp"/>
+	 			
+ 			<forward name="article" path="/board/article.jsp"/>
+				
+			<forward name="update" path="/board/update.jsp"/>
+			
+				<!-- article update update_ok delete -->
+	 			
 	 	
 	 	</action>
 

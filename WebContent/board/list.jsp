@@ -68,7 +68,11 @@
 						
 			<dl>
 				<dd class="num">${dto.num }</dd>
-				<dd class="subject">${dto.subject }</dd>
+				<dd class="subject">
+				<a href="${urlArticle }&num=${dto.num }">
+				${dto.subject }
+				</a>
+				</dd>
 				<dd class="name">${dto.name }</dd>
 				<dd class="created">${dto.created }</dd>
 				<dd class="hitCount">${dto.hitCount }</dd>

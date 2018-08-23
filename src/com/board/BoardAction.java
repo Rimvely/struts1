@@ -26,6 +26,14 @@ public class BoardAction extends DispatchAction {
 	public ActionForward write(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+
+		request.setAttribute("searchKey", searchKey);
+		request.setAttribute("searchValue", searchValue);
+		request.setAttribute("pageNum", pageNum);
+
 		//창 띄워라 라는 명령어인데 그게 없어서
 		//돌아갈때 담아갈 단어하나 정하기(여기선 created)
 		//돌아갈 위치는 개인적으로 하는거니까 struts-config_temp.xml를 복사 붙여넣기해서 struts-config_board.xml로 변경
@@ -43,12 +51,13 @@ public class BoardAction extends DispatchAction {
 		BoardDAO dao = new BoardDAO(conn);
 		
 		//create창에서 form을 통해서 5개의 데이터를 가지고 옴
-		BoardForm f = (BoardForm)form;
+		//객채를 생성해서 일일이 다 따로 받을 필요가 없이 ActionForm의 form이 다 가져온다
+		BoardForm dto = (BoardForm)form;
 		
-		f.setNum(dao.getMaxNum()+1);
-		f.setIpAddr(request.getRemoteAddr());
+		dto.setNum(dao.getMaxNum()+1);
+		dto.setIpAddr(request.getRemoteAddr());
 		
-		dao.insertData(f);
+		dao.insertData(dto);
 
 		return mapping.findForward("save");
 	}
@@ -58,6 +67,8 @@ public class BoardAction extends DispatchAction {
 		
 		//처음 할일은 연결
 		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
+		
+		
 		
 		String cp = request.getContextPath();
 		
@@ -101,22 +112,23 @@ public class BoardAction extends DispatchAction {
 		
 		List<BoardForm> lists = dao.getLists(start, end, searchKey, searchValue);
 		
-		String param = "";
+		String params = "";
 		String urlArticle = "";
 		String urlList = "";
+		
 		
 		if(!searchValue.equals("")){
 			
 			searchValue = URLEncoder.encode(searchValue, "UTF-8");
 			
-			param = "&searchKey=" + searchKey;
-			param += "&searchValue=" + searchValue;
+			params = "&searchKey=" + searchKey;
+			params += "&searchValue=" + searchValue;
 			
 		}
 		
-		urlList = cp + "/board.do?method=list" + param;
-		urlArticle = cp + "board.do?method=article&pageNum=" + currentPage;
-		urlArticle += param;
+		urlList = cp + "/board.do?method=list" + params; //검색후 페이지 정렬하기위해 필요한 것
+		urlArticle = cp + "/board.do?method=article&pageNum=" + currentPage;
+		urlArticle += params;
 		
 		request.setAttribute("lists", lists);
 		request.setAttribute("urlArticle", urlArticle);
@@ -127,5 +139,127 @@ public class BoardAction extends DispatchAction {
 		
 		return mapping.findForward("list");
 	}
+	
+	public ActionForward article(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		//처음 할일은 연결
+		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
+		
+		//num을 보냈으니까
+		int num = Integer.parseInt(request.getParameter("num"));
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+		
+		if(searchKey != null) {
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+		
+		//조회수 증가
+		dao.updateHitCount(num);
+		
+		//데이터 읽기
+		BoardForm dto = dao.getReadData(num);
+		
+		if(dto == null) {
+			//경고뜨게하기?
+			return mapping.findForward("save");
+		}
+		
+		int lineSu = dto.getContent().split("\n").length;
+		
+		dto.setContent(dto.getContent().replaceAll("\n", "<br/>"));
+		
+		String param = "pageNum=" + pageNum;
+		if(searchKey != null) {
+			param += "searchKey=" + searchKey;
+			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		request.setAttribute("dto", dto);
+		request.setAttribute("params", param);
+		request.setAttribute("lineSu", lineSu);
+		request.setAttribute("pageNum", pageNum);
+		
+		return mapping.findForward("article");
+		
+	}
+	
+	public ActionForward update(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		//처음 할일은 연결
+		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
+		
+		int num = Integer.parseInt(request.getParameter("num"));
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+		
+		if(searchKey != null) {
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+			
+		}
+		
+		if(searchKey!=null){//검색하면!
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}else{//검색 안하면
+				searchKey = "subject";//기본값 넣어줌
+				searchValue = "";
+		}
+		
+		BoardForm dto = dao.getReadData(num);
+		
+		if(dto == null) {
+			// /board.do?method=list로 redirect 하기위해 save에 있는걸 적용
+			return mapping.findForward("save");
+		}
+		
+		String params = "pageNum="+pageNum;
+		
+		if(searchKey != null){
+			params = "searchKey=" + searchKey;
+			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		request.setAttribute("dto", dto);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("params", params);
+		request.setAttribute("searchKey", searchKey);
+		request.setAttribute("searchValue", searchValue);
+
+		return mapping.findForward("update");
+		
+	}
+	
+	public ActionForward update_ok(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		//처음 할일은 연결
+		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
+		
+		BoardForm dto = (BoardForm)form;
+		
+		dao.updateData(dto);
+		
+		return mapping.findForward("save");
+	}
+	
+	public ActionForward delete(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		//처음 할일은 연결
+		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
+		
+		BoardForm dto = (BoardForm)form;
+		System.out.println(dto.getNum());
+		dao.deleteData(dto.getNum());
+		
+		return mapping.findForward("save");
+	}
+	
+	
+	
 
 }
