@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
 	request.setCharacterEncoding("utf-8");
@@ -13,6 +14,20 @@
 
 <link rel="stylesheet" href="<%=cp%>/board/css/style.css" type="text/css"/>
 <link rel="stylesheet" href="<%=cp%>/board/css/list.css" type="text/css"/>
+
+<script type="text/javascript">
+	
+	//검색할때 명령어
+	function searchData() {
+		
+		var f = document.searchForm;
+		
+		f.action = "<%=cp%>/board.do?method=list";
+		f.submit();
+	}
+
+</script>
+
 
 </head>
 
@@ -31,7 +46,7 @@
 				<option value="content">내용</option>
 			</select>
 			<input type="text" name="searchValue" class="textFiled"/>
-			<input type="button" value=" 검 색 " class="btn2" onclick=""/>
+			<input type="button" value=" 검 색 " class="btn2" onclick="searchData();"/>
 		  </form>
 		</div>
 		<div id="rightHeader">
@@ -49,19 +64,28 @@
 			</dl>
 		</div>
 		<div id="lists">
+			<c:forEach var="dto" items="${lists }">
+						
 			<dl>
-				<dd class="num">1</dd>
-				<dd class="subject">스타일 맞추기 힘들다......</dd>
-				<dd class="name">홍길동</dd>
-				<dd class="created">2000-10-10</dd>
-				<dd class="hitCount">10</dd>
+				<dd class="num">${dto.num }</dd>
+				<dd class="subject">${dto.subject }</dd>
+				<dd class="name">${dto.name }</dd>
+				<dd class="created">${dto.created }</dd>
+				<dd class="hitCount">${dto.hitCount }</dd>
 			</dl>
+			
+			</c:forEach>
+			
 
 		</div>
 		<div id="footer">
 			<p>
-				<a href="#">1</a>
-				<a href="#">2</a>
+				<c:if test="${totalDataCount ne 0 }">
+					${pageIndexList }
+				</c:if>
+				<c:if test="${totalDataCount eq 0 }">
+					등록된 게시물이 없습니다.
+				</c:if>
 			</p>
 		</div>
 	</div>

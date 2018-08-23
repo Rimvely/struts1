@@ -42,7 +42,7 @@ public class MyUtil {
     
 // Get 방식에 의한 페이지 처리 메서드 *************************************
     public String pageIndexList(int current_page, int total_page, String list_url) {
-        int numPerBlock = 10;   // 리스트에 나타낼 페이지 수
+        int numPerBlock = 5;   // 리스트에 나타낼 페이지 수
         int currentPageSetUp;
         int n;
         int page;
