@@ -21,7 +21,7 @@
 
 <div id="bbs">
 	<div id="bbs_title">
-	게 시 판( struts1 )
+	게 시 판 ( iBatis )
 	</div>
 	<div id="bbsArticle">
 		<div id="bbsArticle_header">
@@ -51,10 +51,16 @@
 			</table>
 		</div>
 		<div class="bbsArticle_bottomLine">
-			이전글 : 작업중
+			이전글 : 
+			<c:if test="${!empty preUrl }">
+				<a href="${preUrl }">${preSubject }</a>
+			</c:if>
 		</div>
 		<div class="bbsArticle_noLine">
-			다음글 : 작업중
+			다음글 : 
+			<c:if test="${!empty nextUrl }">
+				<a href="${nextUrl }">${nextSubject }</a>
+			</c:if>
 		</div>
 	</div>
 	<div class="bbsArticle_noLine" style="text-align:right">
@@ -62,16 +68,14 @@
 	</div>
 	<div id="bbsArticle_footer">
 		<div id="leftFooter">
-		<input type="hidden" name="num" value=${num }/>
-		<input type="hidden" name="pageNum" value=${pageNum }/>
-		<input type="hidden" name="searchKey" value=${searchKey }/>
-		<input type="hidden" name="searchValue" value=${searchValue }/>
-			
-            <input type="button" value=" 수정하기 " class="btn2" onclick="javascript:location.href='<%=cp%>/board.do?method=update'"/>
-            <input type="button" value=" 삭제하기 " class="btn2" onclick="javascript:location.href='<%=cp%>/board.do?method=delete'"/>
+               <input type="button" value=" 수정 " class="btn2" 
+               onclick="javascript:location.href='<%=cp%>/boardTest.do?method=update&${paramArticle }'"/>
+               <input type="button" value=" 삭제 " class="btn2" 
+               onclick="javascript:location.href='<%=cp%>/boardTest.do?method=delete&${paramArticle }'"/>
 		</div>
 		<div id="rightFooter">
-               <input type="button" value=" 리스트 " class="btn2" onclick="javascript:location.href='<%=cp%>/board.do?method=list'"/>
+               <input type="button" value=" 리스트 " class="btn2" 
+               onclick="javascript:location.href='${urlList}'"/>
 		</div>
 	</div>
 

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- namespace 는 사용자 정의이다  -->    
+<sqlMap namespace="boardTest">
+
+<select id="maxNum" resultClass="Integer">
+	select nvl(max(num),0) from board
+</select>
+
+<insert id="insertData" parameterClass="com.boardTest.BoardForm">
+	insert into board (num,subject,name,email,content,
+	pwd,ipAddr,hitCount,created) values (#num#,#subject#,#name#,#email#,#content#,
+	#pwd#,#ipAddr#,0,sysdate)
+</insert>
+
+<!-- 반복적인 내용을 처리하는 방법 -->
+<sql id="where-list">
+	<isEqual property="searchKey" compareValue="name">
+		where name like '%' || #searchValue# || '%'
+	</isEqual>
+
+	<isEqual property="searchKey" compareValue="subject">
+		where subject like '%' || #searchValue# || '%'
+	</isEqual>
+	
+		<isEqual property="searchKey" compareValue="content">
+		where content like '%' || #searchValue# || '%'
+	</isEqual>
+</sql>
+
+<sql id="field-list">
+	num,name,subject,hitCount,to_char(created,'YYYY-MM-DD') created
+</sql>
+
+
+
+<!--
+
+<select id="dataCount" resultClass="Integer" parameterClass="map">
+	select nvl(count(num),0) from board
+	<include refid="where-list"/>
+</select>
+
+
+<select id="listData" resultClass="com.boardTest.BoardForm" parameterClass="map">
+	select * from ( 
+	select rownum rnum, data.* from (
+	select <include refid="field-list"/> from board 
+	<include refid="where-list"/>
+	order by num desc) data)
+<![CDATA[	
+	where rnum>=#start# and rnum<=#end#
+]]>
+</select> 
+
+-->
+
+<!-- 데이터의 갯수 -->
+<!-- resultClass 는 반환값 Integer 대신에 int 라고 써도 된다 -->
+<!-- hMap에 데이터가 2개가 넘어온다  -->
+<select id="dataCount" resultClass="Integer" parameterClass="map">
+	select nvl(count(num),0) from board
+	where $searchKey$ like '%' || #searchValue# || '%'
+</select>
+
+<!-- 전체 게시물 resultClass=반환값(내보낼때) parameterClass=매개변수(받아낼때) -->
+<select id="listData" resultClass="com.boardTest.BoardForm" parameterClass="map">
+	select * from ( 
+	select rownum rnum, data.* from (
+	select <include refid="field-list"/> from board 
+	where $searchKey$ like '%' || #searchValue# || '%'
+	order by num desc) data)
+<![CDATA[	
+	where rnum >= #start# and rnum <= #end#
+]]>
+</select>
+
+<!-- 한개의 데이터 일기  -->
+<select id="readData" resultClass="com.boardTest.BoardForm" parameterClass="Integer">
+	select num,name,subject,email,pwd,content,ipAddr,
+	hitCount,created from board where num=#num#
+</select>
+
+<!-- 조회수 증가 -->
+<update id="hitCountUpdate" parameterClass="Integer">
+	update board set hitCount = hitCount + 1
+	where num=#num#
+</update>
+
+<!-- 이전글  -->
+<select id="preReadData" resultClass="com.boardTest.BoardForm" parameterClass="map">
+	select data.* from (
+	select num,subject from board 
+	where ($searchKey$ like '%' || #searchValue# || '%') 
+	and (num>#num#) order by num asc) data 
+	where rownum=1
+</select>
+
+<!-- 다음 글 -->
+<select id="nextReadData" resultClass="com.boardTest.BoardForm" parameterClass="map">
+	select data.* from (
+	select num,subject from board 
+	where ($searchKey$ like '%' || #searchValue# || '%') 
+<![CDATA[
+	and (num<#num#) order by num desc) data 
+	where rownum=1
+]]>
+</select>
+
+
+
+
+
+</sqlMap>

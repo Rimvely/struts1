@@ -19,7 +19,6 @@ public class FileManager {
 	// 리턴 : 서버에 저장된 새로운 파일명
 	public static String doFileUpload(FormFile uploadFile, String path)
 			throws Exception {
-		
 		String newFileName = null;
 
 		if (uploadFile == null)

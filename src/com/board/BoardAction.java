@@ -29,9 +29,15 @@ public class BoardAction extends DispatchAction {
 		String pageNum = request.getParameter("pageNum");
 		String searchKey = request.getParameter("searchKey");
 		String searchValue = request.getParameter("searchValue");
-
-		request.setAttribute("searchKey", searchKey);
-		request.setAttribute("searchValue", searchValue);
+		
+		String params = "";
+		
+		if(searchKey != null){
+			params = "&searchKey=" + searchKey;
+			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		request.setAttribute("params", params);
 		request.setAttribute("pageNum", pageNum);
 
 		//창 띄워라 라는 명령어인데 그게 없어서
@@ -46,6 +52,10 @@ public class BoardAction extends DispatchAction {
 	public ActionForward write_ok(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+		
 		//처음 할일은 연결
 		Connection conn = DBCPConn.getConnection();
 		BoardDAO dao = new BoardDAO(conn);
@@ -59,7 +69,21 @@ public class BoardAction extends DispatchAction {
 		
 		dao.insertData(dto);
 
-		return mapping.findForward("save");
+		/*return mapping.findForward("save");*/
+		
+		String params = "pageNum="+pageNum;
+		
+		if(searchKey != null){
+			params = "&searchKey=" + searchKey;
+			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		ActionForward af = new ActionForward();
+
+		af.setRedirect(true);
+		af.setPath("/board.do?method=list&pageNum=" + pageNum + params);
+
+		return af;
 	}
 	
 	public ActionForward list(ActionMapping mapping, ActionForm form,
@@ -132,6 +156,7 @@ public class BoardAction extends DispatchAction {
 		
 		request.setAttribute("lists", lists);
 		request.setAttribute("urlArticle", urlArticle);
+		request.setAttribute("params", params);
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("pageIndexList", myUtil.pageIndexList(currentPage, totalPage, urlList));
 		request.setAttribute("totalPage", totalPage);
@@ -173,11 +198,12 @@ public class BoardAction extends DispatchAction {
 		
 		String param = "pageNum=" + pageNum;
 		if(searchKey != null) {
-			param += "searchKey=" + searchKey;
+			param += "&searchKey=" + searchKey;
 			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
 		}
 		
 		request.setAttribute("dto", dto);
+		request.setAttribute("num", num);
 		request.setAttribute("params", param);
 		request.setAttribute("lineSu", lineSu);
 		request.setAttribute("pageNum", pageNum);
@@ -219,7 +245,7 @@ public class BoardAction extends DispatchAction {
 		String params = "pageNum="+pageNum;
 		
 		if(searchKey != null){
-			params = "searchKey=" + searchKey;
+			params = "&searchKey=" + searchKey;
 			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
 		}
 		
@@ -231,6 +257,8 @@ public class BoardAction extends DispatchAction {
 
 		return mapping.findForward("update");
 		
+
+		
 	}
 	
 	public ActionForward update_ok(ActionMapping mapping, ActionForm form,
@@ -239,15 +267,38 @@ public class BoardAction extends DispatchAction {
 		//처음 할일은 연결
 		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
 		
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+		
 		BoardForm dto = (BoardForm)form;
 		
 		dao.updateData(dto);
 		
-		return mapping.findForward("save");
+		/*return mapping.findForward("save");*/
+		
+		String params = "pageNum="+pageNum;
+		
+		if(searchKey != null){
+			params = "&searchKey=" + searchKey;
+			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		ActionForward af = new ActionForward();
+
+		af.setRedirect(true);
+		af.setPath("/board.do?method=list&pageNum=" + pageNum + params);
+
+		return af;
 	}
 	
 	public ActionForward delete(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		int num = Integer.parseInt(request.getParameter("num"));
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
 		
 		//처음 할일은 연결
 		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
@@ -256,7 +307,22 @@ public class BoardAction extends DispatchAction {
 		System.out.println(dto.getNum());
 		dao.deleteData(dto.getNum());
 		
-		return mapping.findForward("save");
+		String params = "pageNum="+pageNum;
+		
+		if(searchKey != null){
+			params = "&searchKey=" + searchKey;
+			params += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		/*	return mapping.findForward("save");*/
+		
+		ActionForward af = new ActionForward();
+
+		af.setRedirect(true);
+		af.setPath("/board.do?method=list&pageNum=" + pageNum + params);
+
+
+		return af;
 	}
 	
 	

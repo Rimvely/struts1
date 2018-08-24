@@ -137,13 +137,12 @@
 	</div>
 
 	<div id="bbsCreated_footer">
-	
+
 		<input type="hidden" name="method" value="write_ok"/>
 
-	
         <input type="button" value=" 등록하기 " class="btn2" onclick="sendIt();"/>
         <input type="reset" value=" 다시입력 " class="btn2" onclick="document.myForm.subject.focus();"/>
-        <input type="button" value=" 작성취소 " class="btn2" onclick="javascript:location.href='<%=cp%>/boardList.do';"/>
+        <input type="button" value=" 작성취소 " class="btn2" onclick="javascript:location.href='<%=cp%>/board.do?method=list&pageNum=${pageNum}${params }';"/>
 	</div>
 
     </form>

@@ -73,7 +73,7 @@
         }
     	f.pwd.value = str;
     	
-        f.action = "<%=cp%>/board.do";
+        f.action = "<%=cp%>/boardTest.do";
         f.submit();
     }
 
@@ -85,7 +85,7 @@
 
 <div id="bbs">
 	<div id="bbs_title">
-	게 시 판( Struts1 )
+	게 시 판 ( iBatis )
 	</div>
 
 	<form name="myForm" method="post" action="">
@@ -94,7 +94,7 @@
 			<dl>
 				<dt>제&nbsp;&nbsp;&nbsp;&nbsp;목</dt>
 				<dd>
-				      <input type="text" name="subject" value="${dto.subject }" size="74" maxlength="100"  class="boxTF" />
+				      <input type="text" name="subject" size="74" maxlength="100"  class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -103,7 +103,7 @@
 			<dl>
 				<dt>작성자</dt>
 				<dd>
-				      <input type="text" name="name" value="${dto.name }" readonly="readonly"  size="35" maxlength="20" class="boxTF" />
+				      <input type="text" name="name" size="35" maxlength="20" class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -112,7 +112,7 @@
 			<dl>
 				<dt>E-Mail</dt>
 				<dd>
-				      <input type="text" name="email" value="${dto.email }" size="35" maxlength="50" class="boxTF" />
+				      <input type="text" name="email" size="35" maxlength="50" class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -121,7 +121,7 @@
 			<dl>
 				<dt>내&nbsp;&nbsp;&nbsp;&nbsp;용</dt>
 				<dd>
-				      <textarea name="content" cols="63" rows="12" class="boxTA">${dto.content }</textarea>
+				      <textarea name="content" cols="63" rows="12" class="boxTA"></textarea>
 				</dd>
 			</dl>
 		</div>
@@ -137,15 +137,12 @@
 	</div>
 
 	<div id="bbsCreated_footer">
-	<input type="hidden" name="pageNum" value=${pageNum }/>
-		<input type="hidden" name="searchKey" value=${searchKey }/>
-		<input type="hidden" name="searchValue" value=${searchValue }/>
-		<input type="hidden" name="num"	value="${dto.num }"/>
-		<input type="hidden" name="method" value="update_ok"/>
-
+		<input type="hidden" name="method" value="created_ok"/>
 	
-        <input type="button" value=" 수정하기 " class="btn2" onclick="sendIt();"/>
-        <input type="button" value=" 작성취소 " class="btn2" onclick="javascript:location.href='<%=cp%>/board.do?method=list';"/>
+	
+        <input type="button" value=" 등록하기 " class="btn2" onclick="sendIt();"/>
+        <input type="reset" value=" 다시입력 " class="btn2" onclick="document.myForm.subject.focus();"/>
+        <input type="button" value=" 작성취소 " class="btn2" onclick="javascript:location.href='<%=cp%>/boardTest.do?method=list"/>
 	</div>
 
     </form>
