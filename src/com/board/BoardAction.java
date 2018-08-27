@@ -304,7 +304,6 @@ public class BoardAction extends DispatchAction {
 		BoardDAO dao = new BoardDAO(DBCPConn.getConnection());
 		
 		BoardForm dto = (BoardForm)form;
-		System.out.println(dto.getNum());
 		dao.deleteData(dto.getNum());
 		
 		String params = "pageNum="+pageNum;

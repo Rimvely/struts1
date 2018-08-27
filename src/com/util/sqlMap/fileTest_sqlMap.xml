@@ -15,4 +15,32 @@
 	(#num#, #subject#, #saveFileName#, #originalFileName#)
 </insert>
 
+<!-- 전체 데이터  -->
+<select id="listData" resultClass="com.fileTest.FileTestForm" parameterClass="map">
+	select * from (
+	select rownum rnum, data.* from (
+	select num, subject, saveFileName, originalFileName 
+	from fileTest order by num desc) data)
+<![CDATA[	
+	where rnum >= #start# and rnum <= #end#
+]]>
+</select>
+
+<!-- 데이터의 갯수 for 페이징처리  -->
+<select id="dataCount" resultClass="Integer" parameterClass="map">
+	select nvl(count(num),0) from fileTest
+</select>
+
+<!-- 데이터를 삭제하기 위한 1개의 데이터 -->
+<select id="readData" resultClass="com.fileTest.FileTestForm" parameterClass="Integer">
+	select num, subject, saveFileName, originalFileName from fileTest where num=#num#
+</select>
+
+
+<!-- 데이터 삭제 -->
+<delete id="deleteData" parameterClass="Integer">
+	delete fileTest where num=#num#
+</delete>
+
+
 </sqlMap>

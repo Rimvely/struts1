@@ -19,7 +19,7 @@
 	<tr height="30">
 		<td align="right">
 		<input type="button" value="파일 올리기" 
-		onclick="javascript:location.href='<%=cp%>/fileTest.do?method=write';"/>
+		onclick="javascript:location.href='<%=cp%>/fileTest.do?method=write&pageNum=${pageNum }';"/>
 		</td>	
 	</tr>
 </table>
@@ -31,7 +31,42 @@
 		<td width="200">파일</td>
 		<td width="50">삭제</td>
 	</tr>
-</table>
+	
+	<c:if test="${dto.totalDataCount eq 0 }">
+	<tr bgcolor="#ffffff">
+		<td align="center" colspan="4">
+		등록된 자료가 없습니다.
+		</td>
+		</tr>
+	</c:if>
+
+	<c:forEach var="dto" items="${lists }">
+	<tr onmouseover="this.style.backgroundColor='#e4e4e4'"
+	onmouseout="this.style.backgroundColor=''" bgcolor="#ffffff">
+		
+		<td width="50" align="center">${dto.listNum }</td>
+		<td width="200" align="center">${dto.subject }</td>
+		<td width="200" align="center">
+		<a href="${downloadUrl}&num=${dto.num}&pageNum=${pageNum}">
+		${dto.originalFileName }
+		</a>
+		</td>
+		<td width="50" align="center"><a href="<%=cp%>/fileTest.do?method=delete&num=${dto.num }&pageNum=${pageNum}">삭제</a></td>
+	</tr>
+	</c:forEach>
+	
+
+	
+
+</table>	
+
+<c:if test="${dto.totalDataCount ne 0 }">
+	<table width="600" border="0" cellpadding="0" cellspacing="3" align="center">
+		<tr align="center">
+			<td align="center" height="30">${pageIndexList }</td>
+		</tr>
+	</table>	
+</c:if>
 
 
 
@@ -39,9 +74,9 @@
 
 
 
-<br/><br/><br/><br/><br/><br/>
-<br/><br/><br/><br/><br/><br/>
-<br/><br/><br/><br/><br/><br/>
-<br/><br/><br/><br/><br/><br/>
+
+
+
+
 </body>
 </html>

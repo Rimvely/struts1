@@ -20,10 +20,11 @@
 제목 : <input type="text" name="subject"/><br/>
 파일 : <input type="file" name="upload"/><br/>
 
+<input type="hidden" name="pageNum" value="${pageNum }">
 <input type="hidden" name="method" value="write_ok"/>
 <input type="submit" value="파일 올리기"/>
 
-<input type="button" value="리스트" onclick="javascript:location.href='<%=cp%>/fileTest.do?method=list';">
+<input type="button" value="리스트" onclick="javascript:location.href='<%=cp%>/fileTest.do?method=list&pageNum=${pageNum }';">
 
 
 

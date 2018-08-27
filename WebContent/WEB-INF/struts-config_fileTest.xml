@@ -11,13 +11,10 @@
 		<action path="/fileTest" type="com.fileTest.FileTestAction" 
 		name="fileTestForm" scope="request" parameter="method">
 		
-			<forward name="write" path="/fileTest.write.jsp"/>
+			<forward name="write" path="/fileTest/write.jsp"/>
 			
-			<forward name="write_ok" redirect="true" path="/fileTest.do?method=list"/>
+			<forward name="list" path="/fileTest/list.jsp"/>
 			
-			<forward name="list" path="fileTest/list.jsp"/>
-			
-			<forward name="delete_ok" redirect="true" path="fileTest.do?method=list"/>
 		
 		
 		
