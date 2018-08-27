@@ -111,7 +111,15 @@
 ]]>
 </select>
 
+<!-- 수정을 위한 update  -->
+<update id="updateData" parameterClass="com.boardTest.BoardForm">
+	update board set name=#name#, subject=#subject#, email=#email#, content=#content#, pwd=#pwd# where num=#num#
+</update>
 
+<!-- 삭제 -->
+<delete id="deleteData" parameterClass="Integer">
+	delete board where num=#num#
+</delete>
 
 
 

@@ -26,6 +26,7 @@
        classpath, as they are here (com.domain.data...) -->
   
   <sqlMap resource="com/util/sqlMap/board_sqlMap.xml"/>
+  <sqlMap resource="com/util/sqlMap/fileTest_sqlMap.xml"/>
   
   
   <!-- List more here...

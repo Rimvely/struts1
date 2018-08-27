@@ -50,6 +50,7 @@
 		  </form>
 		</div>
 		<div id="rightHeader">
+			
 			<input type="button" value=" 글올리기 " class="btn2" 
 			onclick="javascript:location.href='<%=cp%>/boardTest.do?method=created';"/>
 		</div>

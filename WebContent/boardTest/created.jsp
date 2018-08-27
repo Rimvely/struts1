@@ -94,7 +94,7 @@
 			<dl>
 				<dt>제&nbsp;&nbsp;&nbsp;&nbsp;목</dt>
 				<dd>
-				      <input type="text" name="subject" size="74" maxlength="100"  class="boxTF" />
+				      <input type="text" name="subject" value="${dto.subject }" size="74" maxlength="100"  class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -103,7 +103,7 @@
 			<dl>
 				<dt>작성자</dt>
 				<dd>
-				      <input type="text" name="name" size="35" maxlength="20" class="boxTF" />
+				      <input type="text" name="name" value="${dto.name }" size="35" maxlength="20" class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -112,7 +112,7 @@
 			<dl>
 				<dt>E-Mail</dt>
 				<dd>
-				      <input type="text" name="email" size="35" maxlength="50" class="boxTF" />
+				      <input type="text" name="email" value="${dto.email }" size="35" maxlength="50" class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -121,7 +121,7 @@
 			<dl>
 				<dt>내&nbsp;&nbsp;&nbsp;&nbsp;용</dt>
 				<dd>
-				      <textarea name="content" cols="63" rows="12" class="boxTA"></textarea>
+				      <textarea name="content" cols="63" rows="12" class="boxTA">${dto.content }</textarea>
 				</dd>
 			</dl>
 		</div>
@@ -130,20 +130,32 @@
 			<dl>
 				<dt>패스워드</dt>
 				<dd>
-				      <input type="password" name="pwd" size="35" maxlength="7" class="boxTF" />&nbsp;(게시물 수정 및 삭제시 필요 !!!)
+				      <input type="password" name="pwd" value="${dto.pwd }" size="35" maxlength="7" class="boxTF" />&nbsp;(게시물 수정 및 삭제시 필요 !!!)
 				</dd>
 			</dl>
 		</div>
 	</div>
 
 	<div id="bbsCreated_footer">
+		<input type="hidden" name="num" value="${dto.num }"/>
+		<input type="hidden" name="pageNum" value="${pageNum }"/>
+		<input type="hidden" name="mode" value="${mode }"/>
+		
 		<input type="hidden" name="method" value="created_ok"/>
 	
-	
+	<c:if test="${mode eq 'save' }">	
         <input type="button" value=" 등록하기 " class="btn2" onclick="sendIt();"/>
         <input type="reset" value=" 다시입력 " class="btn2" onclick="document.myForm.subject.focus();"/>
-        <input type="button" value=" 작성취소 " class="btn2" onclick="javascript:location.href='<%=cp%>/boardTest.do?method=list"/>
+        <input type="button" value=" 작성취소 " class="btn2" 
+        onclick="javascript:location.href='<%=cp%>/boardTest.do?method=list';"/>
+    </c:if>
+    	<c:if test="${mode eq 'updateOK' }">	
+        <input type="button" value=" 수정하기 " class="btn2" onclick="sendIt();"/>
+        <input type="button" value=" 수정취소 " class="btn2" 
+        onclick="javascript:location.href='<%=cp%>/boardTest.do?method=list';"/>
+    </c:if>
 	</div>
+	
 
     </form>
 </div>

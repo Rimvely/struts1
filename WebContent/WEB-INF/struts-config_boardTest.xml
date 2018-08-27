@@ -20,6 +20,8 @@
 			
 			<forward name="article" path="/boardTest/article.jsp"/>
 			
+			<forward name="delete" redirect="true" path="/boardTest.do?method=list"/>
+						
 		</action>
 
     </action-mappings>
